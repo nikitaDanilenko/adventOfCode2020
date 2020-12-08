@@ -33,7 +33,7 @@ asPosition l u c
 
 solution :: IO Integer
 solution = do
-    text <- readFile "./inputs/day05.txt"
+    text <- readFile "../inputs/day05.txt"
     let ls = lines text
         ids = map (uncurry idOfSeat . readSeat) ls
     return (maximum ids)

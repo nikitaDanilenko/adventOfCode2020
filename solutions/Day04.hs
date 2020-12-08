@@ -89,6 +89,6 @@ readPassports p = catMaybes . map (readPassport p). splitOn "" . lines
 
 readAllValid :: (Passport -> Bool) -> IO Int
 readAllValid validator = do
-    text <- readFile "./inputs/day04.txt"
+    text <- readFile "../inputs/day04.txt"
     let valids = readPassports passportParser text
     return (length (filter validator valids))

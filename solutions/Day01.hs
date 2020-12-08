@@ -6,6 +6,6 @@ allFitting3 target vs = [((x, y, z), x * y * z) | x <- vs, y <- vs, z <- vs, x +
 
 readValues :: IO [Int]
 readValues = do
-    text <- readFile "./inputs/day01.txt"
+    text <- readFile "../inputs/day01.txt"
     let ls = lines text
     return (map read ls)

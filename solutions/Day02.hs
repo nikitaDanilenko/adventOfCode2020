@@ -47,6 +47,6 @@ readPolicy text =
 
 readPolicies :: IO [(Policy, String)]
 readPolicies = do
-    pws <- readFile "./inputs/day02.txt"
+    pws <- readFile "../inputs/day02.txt"
     let policies = map readPolicy (lines pws)
     return policies

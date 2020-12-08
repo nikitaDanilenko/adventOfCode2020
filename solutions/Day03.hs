@@ -31,5 +31,5 @@ descendSteps height width right down geo = go 0 (1, 1) where
 
 readGeography :: IO (Geography, Int, Int)
 readGeography =
-    fmap mkMatrix (readFile "./inputs/day03.txt")
+    fmap mkMatrix (readFile "../inputs/day03.txt")
 
