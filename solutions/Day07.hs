@@ -9,7 +9,7 @@ import Data.Map                ( Map, fromList, keysSet, elems )
 import Data.List               ( sortBy, groupBy )
 import Data.Ord                ( comparing )
 import qualified Data.Map as M ( lookup )
-import Data.Maybe              ( catMaybes )
+import Data.Maybe              ( catMaybes, fromMaybe )
 import qualified Data.Set as S ( fromList, intersection, difference, empty, toList, union ) 
 
 data Rule = Rule {
@@ -52,8 +52,10 @@ mkReverseGraph =
     . mkReversePairs
     where mkReversePairs = concatMap (\r -> map (\c -> (contentColour c, ruleColour r)) (contents r))
 
-mkGraph :: [Rule] -> Map String Content
-mkGraph = fromList . map (\r -> (ruleColour r, contents r))
+type ContentMap = Map String [Content]
+
+mkContentMap :: [Rule] -> ContentMap
+mkContentMap = fromList . map (\r -> (ruleColour r, contents r))
 
 -- It is important to take all nodes into account, since the original graph may contain dead ends.
 reachable :: Ord a => [a] -> Graph a -> [[a]]
@@ -75,3 +77,10 @@ readRules = do
 
 solution1With :: [Rule] -> Int
 solution1With = pred . length . concat . reachable ["shiny gold"] . mkReverseGraph
+
+at :: ContentMap -> String -> [Content]
+at cm c = fromMaybe [] (M.lookup c cm)
+
+forColour :: ContentMap -> String -> Integer
+forColour m c =
+    sum (map (\ct -> (amount ct) * (1 + forColour m (contentColour ct))) (m `at` c))
