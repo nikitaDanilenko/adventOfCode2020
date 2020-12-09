@@ -1,3 +1,5 @@
+module Day02 where
+
 import Text.Parsec.String (Parser)
 import Text.Parsec.Char (char, letter, spaces)
 import Text.Parsec.Language (haskellStyle)
