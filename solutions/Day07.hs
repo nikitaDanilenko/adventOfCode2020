@@ -84,3 +84,10 @@ at cm c = fromMaybe [] (M.lookup c cm)
 forColour :: ContentMap -> String -> Integer
 forColour m c =
     sum (map (\ct -> (amount ct) * (1 + forColour m (contentColour ct))) (m `at` c))
+
+solution2 :: IO Integer
+solution2 = do
+    rs <- readRules
+    let cm = mkContentMap rs
+        a = forColour cm "shiny gold"
+    return a
