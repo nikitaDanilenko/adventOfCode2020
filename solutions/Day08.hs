@@ -6,8 +6,9 @@ import Text.Parsec.Char        ( spaces, string )
 import Text.Parsec.Combinator  ( sepBy )
 import Text.Parsec             ( choice, parse )
 import Data.Maybe              ( catMaybes )
-import Data.Map                ( Map, fromList, (!) )
+import Data.Map                ( Map, fromList, (!), findMax, notMember )
 import qualified Data.Set as S ( empty, insert, member ) 
+import Data.List               ( findIndices, find )
 
 
 data Op = Nop | Acc | Jmp
@@ -55,13 +56,16 @@ type CmdMap = Map Integer Cmd
 mkCmdMap :: [Cmd] -> CmdMap
 mkCmdMap = fromList . map (\cmd -> (position cmd, cmd))
 
-processUntilLoop :: [Cmd] -> Integer
+processUntilLoop :: [Cmd] -> Result
 processUntilLoop cs = go 0 S.empty (head cs) where
     cmdMap = mkCmdMap cs
+    highest = fst (findMax cmdMap)
 
     go acc visited cmd 
-        | position cmd `S.member` visited = acc
-        | otherwise = go nextAcc (S.insert (position cmd) visited) next where
+        | position cmd `S.member` visited = Result acc True
+        | notMember nextPos cmdMap        = Result nextAcc False
+        | otherwise                       = go nextAcc (S.insert (position cmd) visited) next 
+        where
             (nextAcc, nextPos) = 
                 case op cmd of
                     Nop -> (acc, 1 + position cmd)
@@ -69,5 +73,30 @@ processUntilLoop cs = go 0 S.empty (head cs) where
                     Jmp -> (acc, change cmd + position cmd)
             next = cmdMap ! nextPos
 
+data Result = Result { value :: Integer, looped :: Bool }
+    deriving Show
+
 solution1 :: IO Integer
-solution1 = fmap processUntilLoop readCmds
+solution1 = fmap (value . processUntilLoop) readCmds
+
+isNopOrJmp :: Op -> Bool
+isNopOrJmp Acc = False
+isNopOrJmp _ = True
+
+switchJmpNop :: Op -> Op
+switchJmpNop Jmp = Nop
+switchJmpNop Nop = Jmp
+switchJmpNop o = o
+
+switchAt :: Integer -> [Cmd] -> [Cmd]
+switchAt pos = map (\c -> if position c == pos then c { op = switchJmpNop (op c) } else c)
+
+attempt :: [Cmd] -> Maybe Result
+attempt cs = guess where
+
+    jmpNopIndices = map (+1) (findIndices (isNopOrJmp . op) cs)
+
+    guess = find (not . looped) (map processUntilLoop (cs : map (flip switchAt cs . fromIntegral) jmpNopIndices))
+
+solution2 :: IO (Maybe Integer)
+solution2 = fmap (fmap value . attempt) readCmds 
