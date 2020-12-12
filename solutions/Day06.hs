@@ -1,7 +1,7 @@
 module Day06 where
 
-import Data.Set (fromList, intersection, size)
-import Day04 (splitOn)
+import           Data.Set (fromList, intersection, size)
+import           Day04    (splitOn)
 
 countGroup :: [String] -> Int
 countGroup = size . fromList . concat

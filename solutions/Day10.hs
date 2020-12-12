@@ -1,7 +1,7 @@
 module Day10 where
 
-import Data.List (sort)
-import Day04 (splitOn)
+import           Data.List (sort)
+import           Day04     (splitOn)
 
 readInput :: IO [Integer]
 readInput = do

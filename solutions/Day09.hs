@@ -1,7 +1,7 @@
 module Day09 where
 
-import Data.List (find, inits, tails)
-import Data.Maybe (listToMaybe, mapMaybe)
+import           Data.List  (find, inits, tails)
+import           Data.Maybe (listToMaybe, mapMaybe)
 
 readNumbers :: IO [Integer]
 readNumbers =

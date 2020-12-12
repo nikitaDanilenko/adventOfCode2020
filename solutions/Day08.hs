@@ -1,13 +1,13 @@
 module Day08 where
 
-import Data.List (find, findIndices)
-import Data.Map (Map, fromList, notMember, (!))
-import Data.Maybe (mapMaybe)
-import qualified Data.Set as S (empty, insert, member)
-import Day02 (int)
-import Text.Parsec (choice, parse)
-import Text.Parsec.Char (spaces, string)
-import Text.Parsec.String (Parser)
+import           Data.List          (find, findIndices)
+import           Data.Map           (Map, fromList, notMember, (!))
+import           Data.Maybe         (mapMaybe)
+import qualified Data.Set           as S (empty, insert, member)
+import           Day02              (int)
+import           Text.Parsec        (choice, parse)
+import           Text.Parsec.Char   (spaces, string)
+import           Text.Parsec.String (Parser)
 
 data Op = Nop | Acc | Jmp
   deriving (Show)
@@ -37,7 +37,7 @@ cmdParser = do
 parseCmd :: String -> Maybe Cmd
 parseCmd t = case parse cmdParser "" t of
   Right c -> Just c
-  Left _ -> Nothing
+  Left _  -> Nothing
 
 parseCmds :: [String] -> [Cmd]
 parseCmds = mapMaybe parseCmd
@@ -79,12 +79,12 @@ solution1 = fmap (value . processUntilLoop) readCmds
 
 isNopOrJmp :: Op -> Bool
 isNopOrJmp Acc = False
-isNopOrJmp _ = True
+isNopOrJmp _   = True
 
 switchJmpNop :: Op -> Op
 switchJmpNop Jmp = Nop
 switchJmpNop Nop = Jmp
-switchJmpNop o = o
+switchJmpNop o   = o
 
 switchAt :: Integer -> [Cmd] -> [Cmd]
 switchAt pos = map (\c -> if position c == pos then c {op = switchJmpNop (op c)} else c)

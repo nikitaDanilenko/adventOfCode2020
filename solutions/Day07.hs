@@ -1,25 +1,26 @@
 module Day07 where
 
-import Data.List (groupBy, sortBy)
-import Data.Map (Map, elems, fromList, keysSet)
-import qualified Data.Map as M (lookup)
-import Data.Maybe (fromMaybe, mapMaybe)
-import Data.Ord (comparing)
-import qualified Data.Set as S (difference, fromList, intersection, toList, union)
-import Day02 (int)
-import Text.Parsec (choice, parse, try)
-import Text.Parsec.Char (anyChar, spaces, string)
-import Text.Parsec.Combinator (manyTill, optional, sepBy)
-import Text.Parsec.String (Parser)
+import           Data.List              (groupBy, sortBy)
+import           Data.Map               (Map, elems, fromList, keysSet)
+import qualified Data.Map               as M (lookup)
+import           Data.Maybe             (fromMaybe, mapMaybe)
+import           Data.Ord               (comparing)
+import qualified Data.Set               as S (difference, fromList,
+                                              intersection, toList, union)
+import           Day02                  (int)
+import           Text.Parsec            (choice, parse, try)
+import           Text.Parsec.Char       (anyChar, spaces, string)
+import           Text.Parsec.Combinator (manyTill, optional, sepBy)
+import           Text.Parsec.String     (Parser)
 
 data Rule = Rule
   { ruleColour :: String,
-    contents :: [Content]
+    contents   :: [Content]
   }
   deriving (Show)
 
 data Content = Content
-  { amount :: Integer,
+  { amount        :: Integer,
     contentColour :: String
   }
   deriving (Show)
@@ -30,7 +31,7 @@ contentParser = do
   spaces
   col <- manyTill anyChar (try (string " bag"))
   optional (string "s")
-  return (Content n col)
+  pure (Content n col)
 
 ruleParser :: Parser Rule
 ruleParser = do
@@ -38,7 +39,7 @@ ruleParser = do
   spaces
   cs <- choice [fmap (const []) (string "no other bags"), sepBy contentParser (string ", ")]
   string "."
-  return (Rule rcol cs)
+  pure (Rule rcol cs)
 
 rulesParser :: Parser [Rule]
 rulesParser = sepBy ruleParser (string "\n")

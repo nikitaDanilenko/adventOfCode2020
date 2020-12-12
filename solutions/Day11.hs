@@ -1,29 +1,30 @@
 module Day11 where
 
-import Crypto.Hash (Digest, hash)
-import Crypto.Hash.Algorithms (SHA512)
-import qualified Data.ByteString.Char8 as B
-import Data.List (groupBy, minimumBy, sortBy)
-import Data.Map (Map, fromList, keys, mapWithKey, size, toList, (!))
-import qualified Data.Map as M (filter, lookup)
-import Data.Maybe (catMaybes, mapMaybe)
-import Data.Ord (comparing)
-import Data.Set (Set, empty, insert, member)
+import           Crypto.Hash            (Digest, hash)
+import           Crypto.Hash.Algorithms (SHA512)
+import qualified Data.ByteString.Char8  as B
+import           Data.List              (groupBy, minimumBy, sortBy)
+import           Data.Map               (Map, fromList, keys, mapWithKey, size,
+                                         toList, (!))
+import qualified Data.Map               as M (filter, lookup)
+import           Data.Maybe             (catMaybes, mapMaybe)
+import           Data.Ord               (comparing)
+import           Data.Set               (Set, empty, insert, member)
 
 data Pos = Floor | Empty | Taken
   deriving (Show)
 
 isEmpty :: Pos -> Bool
 isEmpty Empty = True
-isEmpty _ = False
+isEmpty _     = False
 
 isTaken :: Pos -> Bool
 isTaken Taken = True
-isTaken _ = False
+isTaken _     = False
 
 isSeat :: Pos -> Bool
 isSeat Floor = False
-isSeat _ = True
+isSeat _     = True
 
 floorSymbol, emptySymbol, takenSymbol :: Char
 floorSymbol = '.'

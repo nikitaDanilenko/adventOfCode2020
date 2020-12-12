@@ -1,12 +1,13 @@
 module Day02 where
 
-import Data.List (genericDrop, genericLength)
-import Text.Parsec (many, parse)
-import Text.Parsec.Char (char, letter, spaces)
-import Text.Parsec.Language (haskellStyle)
-import Text.Parsec.String (Parser)
-import Text.Parsec.Token (TokenParser)
-import Text.ParserCombinators.Parsec.Token (integer, makeTokenParser)
+import           Data.List                           (genericDrop,
+                                                      genericLength)
+import           Text.Parsec                         (many, parse)
+import           Text.Parsec.Char                    (char, letter, spaces)
+import           Text.Parsec.Language                (haskellStyle)
+import           Text.Parsec.String                  (Parser)
+import           Text.Parsec.Token                   (TokenParser)
+import           Text.ParserCombinators.Parsec.Token (integer, makeTokenParser)
 
 data Policy = Policy {minOccurrence :: Integer, maxOccurrence :: Integer, character :: Char}
 
@@ -49,7 +50,7 @@ readPolicy :: String -> (Policy, String)
 readPolicy text =
   case parse policyParser "" text of
     Right p -> p
-    Left _ -> error "Could not parse policy"
+    Left _  -> error "Could not parse policy"
 
 readPolicies :: IO [(Policy, String)]
 readPolicies = do

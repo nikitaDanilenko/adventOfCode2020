@@ -1,11 +1,11 @@
 module Day04 where
 
-import Data.Char (isDigit, isHexDigit)
-import Data.List (isPrefixOf, isSuffixOf, sort)
-import Data.Maybe (mapMaybe)
-import Text.Parsec (many, parse)
-import Text.Parsec.Char (char, noneOf, space, string)
-import Text.Parsec.String (Parser)
+import           Data.Char          (isDigit, isHexDigit)
+import           Data.List          (isPrefixOf, isSuffixOf, sort)
+import           Data.Maybe         (mapMaybe)
+import           Text.Parsec        (many, parse)
+import           Text.Parsec.Char   (char, noneOf, space, string)
+import           Text.Parsec.String (Parser)
 
 data Passport = Passport
   { byr :: String,
@@ -33,7 +33,7 @@ passportParser = do
   iyrParam <- mkAttributeParser "iyr"
   space
   pidParam <- mkAttributeParser "pid"
-  return (Passport byrParam eclParam eyrParam hclParam hgtParam iyrParam pidParam)
+  pure (Passport byrParam eclParam eyrParam hclParam hgtParam iyrParam pidParam)
 
 mkAttributeParser :: String -> Parser String
 mkAttributeParser name = do
@@ -45,7 +45,7 @@ readPassport :: Parser Passport -> [String] -> Maybe Passport
 readPassport parser ls =
   case parse parser "" (unwords (filter (not . isPrefixOf "cid") (sort (words (unwords ls))))) of
     Right p -> Just p
-    _ -> Nothing
+    _       -> Nothing
 
 isValidPassport :: Passport -> Bool
 isValidPassport p =
@@ -66,7 +66,7 @@ eyrValid :: String -> Bool
 eyrValid = yearValid 2020 2030
 
 hclValid :: String -> Bool
-hclValid [] = False
+hclValid []       = False
 hclValid (c : cs) = c == '#' && length cs == 6 && all isHexDigit cs
 
 hgtValid :: String -> Bool

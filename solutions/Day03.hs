@@ -1,6 +1,6 @@
 module Day03 where
 
-import Data.Map (Map, fromList, (!))
+import           Data.Map (Map, fromList, (!))
 
 data Field = E | T
   deriving (Show)
@@ -11,7 +11,7 @@ isTree _ = False
 
 readField :: Char -> Field
 readField '.' = E
-readField _ = T
+readField _   = T
 
 type Geography = Map (Int, Int) Field
 
