@@ -1,3 +1,5 @@
+module Day03 where
+
 import Data.Map (Map, fromList, (!))
 
 data Field = E | T

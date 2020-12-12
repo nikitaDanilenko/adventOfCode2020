@@ -1,3 +1,5 @@
+module Day01 where
+
 allFitting2 :: Int -> [Int] -> [((Int, Int), Int)]
 allFitting2 target vs = [((x, y), x * y) | x <- vs, y <- vs, x + y == target]
 

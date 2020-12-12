@@ -1,3 +1,5 @@
+module Day05 where
+
 data Position = Lower | Upper
 
 asNumber :: [Position] -> Integer
