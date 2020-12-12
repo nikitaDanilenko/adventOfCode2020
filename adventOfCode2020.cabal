@@ -1,0 +1,47 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 13687f8fc7d0c0e3fdb7d52334f24adf87f1a88126f53dab8a6c1f5764689088
+
+name:           adventOfCode2020
+version:        0.1.0.0
+homepage:       https://github.com/nikitaDanilenko/adventOfCode2020#readme
+bug-reports:    https://github.com/nikitaDanilenko/adventOfCode2020/issues
+author:         Nikita Danilenko
+maintainer:     nikita.danilenko.is@gmail.com
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/nikitaDanilenko/adventOfCode2020
+
+library
+  exposed-modules:
+      Day01
+      Day02
+      Day03
+      Day04
+      Day05
+      Day06
+      Day07
+      Day08
+      Day09
+      Day10
+      Day11
+      Lib
+  other-modules:
+      Paths_adventOfCode2020
+  hs-source-dirs:
+      solutions
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , cryptonite
+    , parsec
+  default-language: Haskell2010
