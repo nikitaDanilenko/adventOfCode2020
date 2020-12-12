@@ -61,19 +61,63 @@ degreesToInt str
   | str `elem` ["R180", "L180"] = 2
   | otherwise = 1
 
-move :: Instruction -> (Integer, Integer) -> Direction -> ((Integer, Integer), Direction)
+move :: Instruction -> Pos -> Direction -> (Pos, Direction)
 move ins (x, y) facing =
   case ins of
     Rotation i -> ((x, y), rotateInt i facing)
     Move d i -> (step d i (x, y), facing)
     Forward i -> (step facing i (x, y), facing)
 
-step :: Direction -> Integer -> (Integer, Integer) -> (Integer, Integer)
+type Pos = (Integer, Integer)
+
+data Positions = Positions {
+  ofShip :: Pos,
+  waypointDiff :: Pos
+ } deriving Show
+
+waypointOffset :: Pos
+waypointOffset = (1, 10)
+
+moveWithWaypoint :: Instruction -> Positions -> Positions
+moveWithWaypoint ins ps = case ins of
+  Rotation i -> rotateWithWaypoint i ps
+  Move d i -> ps { waypointDiff = step d i (waypointDiff ps)}
+  Forward i -> moveToWaypoint i ps
+
+(.+.) :: Pos -> Pos -> Pos
+(x, y) .+. (a, b) = (x + a, y + b)
+
+moveToWaypoint :: Integer -> Positions -> Positions
+moveToWaypoint i ps = stepTo i off ps where
+  off = waypointDiff ps
+
+  stepTo i off ps | i <= 0 = ps
+                  | otherwise = stepTo (i - 1) off (ps { ofShip = ofShip ps .+. off})
+
+rotateWithWaypoint :: Integer -> Positions -> Positions
+rotateWithWaypoint i ps = Positions os ow where
+  (n, e) = waypointDiff ps
+  ow | i == 1 = (e, -n)
+     | i == 2 = (-n, -e)
+     | otherwise = (-e, n)
+
+  os = ofShip ps
+
+step :: Direction -> Integer -> Pos -> Pos
 step d i (x, y) = case d of
   E -> (x, y + i)
   W -> (x, y - i)
   N -> (x + i, y)
   S -> (x - i, y)
 
-proceed :: [Instruction] -> (Integer, Integer)
+proceed :: [Instruction] -> Pos
 proceed = fst . foldl (\(p, facing) ins  -> move ins p facing) ((0, 0), E)
+
+solution1 :: String -> IO Integer
+solution1 file = do
+ is <- readInstructions file
+ let (x, y) = proceed is
+ pure (abs x + abs y)
+
+proceed2 :: [Instruction] -> Pos
+proceed2 = ofShip . foldl (flip moveWithWaypoint) (Positions (0, 0) waypointOffset)
