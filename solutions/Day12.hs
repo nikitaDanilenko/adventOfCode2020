@@ -114,10 +114,16 @@ proceed :: [Instruction] -> Pos
 proceed = fst . foldl (\(p, facing) ins  -> move ins p facing) ((0, 0), E)
 
 solution1 :: String -> IO Integer
-solution1 file = do
- is <- readInstructions file
- let (x, y) = proceed is
- pure (abs x + abs y)
+solution1 = solutionWith proceed
 
 proceed2 :: [Instruction] -> Pos
 proceed2 = ofShip . foldl (flip moveWithWaypoint) (Positions (0, 0) waypointOffset)
+
+solution2 :: String -> IO Integer
+solution2 = solutionWith proceed2
+
+solutionWith :: ([Instruction] -> Pos) -> String -> IO Integer
+solutionWith proc file = do
+  is <- readInstructions file
+  let (x, y) = proc is
+  pure (abs x + abs y)
