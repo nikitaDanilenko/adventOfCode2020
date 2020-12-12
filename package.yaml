@@ -1,0 +1,16 @@
+name:                adventOfCode2020
+version:             0.1.0.0
+github:              "nikitaDanilenko/adventOfCode2020"
+license:             BSD3
+author:              "Nikita Danilenko"
+maintainer:          "nikita.danilenko.is@gmail.com"
+copyright:           ""
+
+dependencies:
+  - base >= 4.7 && < 5
+  - parsec
+  - containers
+  - hashable
+
+library:
+  source-dirs: solutions

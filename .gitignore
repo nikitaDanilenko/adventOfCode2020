@@ -1,2 +1,7 @@
 /.idea
 .cabal-sandbox
+*.cabal
+*.iml
+cabal.sandbox.config
+stack.yaml.lock
+.stack-work
