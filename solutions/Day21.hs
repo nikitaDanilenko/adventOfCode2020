@@ -53,3 +53,6 @@ allIngredients = fromList . concatMap ingredients
 nonAllergens :: [Recipe] -> [String]
 nonAllergens rs = filter (`notMember` as) (concatMap ingredients rs) where
   as = unions (elems (mkMap rs))
+
+solution1 :: FilePath -> IO Int
+solution1 = fmap (length . nonAllergens) . readRecipes
