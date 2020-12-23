@@ -1,7 +1,9 @@
 module Day22 where
 
-import Day18 (readLines)
+import Data.List (genericLength, genericTake)
+import Data.Set (Set, empty, insert, member)
 import Day04 (splitOn)
+import Day18 (readLines)
 
 readCards :: FilePath -> IO ([Integer], [Integer])
 readCards file = do
@@ -23,3 +25,24 @@ result = sum . zipWith (*) [1 ..] . reverse
 
 solution1 :: FilePath -> IO Integer
 solution1 = fmap (result . uncurry play) . readCards
+
+type Constellation = ([Integer], [Integer])
+
+data Player = One | Two
+
+play2 :: Set Constellation -> [Integer] -> [Integer] -> (Player, [Integer])
+play2 _ [] ys = (Two, ys)
+play2 _ xs [] = (One, xs)
+play2 cs p1@(x : xs) p2@(y : ys)
+  | (p1, p2) `member` cs = (One, p1)
+  | genericLength xs >= x && genericLength ys >= y =
+    case fst (play2 empty (genericTake x xs) (genericTake y ys)) of
+          One -> play2 nextSet (xs ++ [x, y]) ys
+          Two -> play2 nextSet xs (ys ++ [y, x])
+  | x > y = play2 nextSet (xs ++ [x, y]) ys
+  | x < y = play2 nextSet xs (ys ++ [y, x])
+  | otherwise = error "Invalid input"
+ where nextSet = (p1, p2) `insert` cs
+ 
+solution2 :: FilePath -> IO Integer
+solution2 = fmap (result . snd . uncurry (play2 empty)) . readCards
